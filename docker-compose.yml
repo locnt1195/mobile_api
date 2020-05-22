@@ -11,7 +11,9 @@ services:
       - ./etc:/etc/odoo
       - ./project:/mnt/extra-addons
     tty: true
-    command: -- --test-enable -d db-test -u mobile_wallet_api
+    # command: -- -d mobile_wallet_api -u mobile_wallet_api
+    # To run test, use command below
+    command: -- -d mobile_wallet -u mobile_wallet_api --test-enable
     restart: always
   db:
     image: postgres:10

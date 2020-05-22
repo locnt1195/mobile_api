@@ -6,7 +6,7 @@
     'description': """.
     """,
     'author': '',
-    'website': 'http://seaedtech.com',
+    'website': '',
     'depends': [
         'contacts',
         'website',
