@@ -8,11 +8,13 @@ from odoo.http import local_redirect, request
 from odoo.exceptions import ValidationError
 from datetime import datetime
 from odoo.addons.website.controllers.main import Website
+from odoo.addons.restful.controllers.main import validate_token
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT as DTF
 
 
 class Controller(Website):
 
+    @validate_token
     @http.route(['/api/partner/transactions'],
                 type='http', auth="user", methods=['GET'])
     def get_partner_transactions(self, from_date=None, to_date=None, limit=None):
@@ -45,6 +47,7 @@ class Controller(Website):
             ),
         )
 
+    @validate_token
     @http.route(['/api/partner/balance'],
                 type='http', auth="user", methods=['GET'])
     def get_partner_balance(self):
@@ -63,6 +66,7 @@ class Controller(Website):
             ),
         )
 
+    @validate_token
     @http.route(['/api/partner/sent'],
                 type='http', auth="user", methods=['POST'], csrf=False)
     def make_transaction(self, **kw):
