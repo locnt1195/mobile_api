@@ -56,3 +56,25 @@ class ResParter(models.Model):
         transaction = self.transaction_sent_ids.create(vals)
         transaction.update_partner_amount()
         return transaction
+
+    @api.multi
+    def get_transactions(self, from_date=None, to_date=None, limit=None):
+        self.ensure_one()
+        domain = [
+            '|',
+            ('from_partner_id', '=', self.id),
+            ('to_partner_id', '=', self.id),
+        ]
+        domain_date = []
+        if from_date:
+            from_date = fields.Datetime.to_datetime(from_date).replace(
+                hour=0, minute=0, second=0
+            )
+            domain_date += [('create_date', '>=', from_date)]
+        if to_date:
+            to_date = fields.Datetime.to_datetime(to_date).replace(
+                hour=23, minute=59, second=59
+            )
+            domain_date += [('create_date', '<=', to_date)]
+        return self.env['partner.transaction'].search(
+            domain_date + domain, limit=limit)

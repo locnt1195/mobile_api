@@ -15,11 +15,11 @@ class Controller(Website):
 
     @http.route(['/api/partner/transactions'],
                 type='http', auth="user", methods=['GET'])
-    def get_partner_transactions(self):
+    def get_partner_transactions(self, from_date=None, to_date=None, limit=None):
         user = request.env['res.users'].browse(request.uid)
         partner = user.partner_id
-        transactions = partner.transaction_sent_ids +\
-            partner.transaction_receive_ids
+        limit = limit and int(limit) or None
+        transactions = partner.get_transactions(from_date, to_date, limit)
         data = [
             {
                 'description': transaction.description or '',
