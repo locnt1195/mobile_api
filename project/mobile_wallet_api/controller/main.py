@@ -16,7 +16,7 @@ class Controller(Website):
 
     @validate_token
     @http.route(['/api/partner/transactions'],
-                type='http', auth="user", methods=['GET'])
+                type='http', auth="none", methods=['GET'])
     def get_partner_transactions(self, from_date=None, to_date=None, limit=None):
         user = request.env['res.users'].browse(request.uid)
         partner = user.partner_id
@@ -49,7 +49,7 @@ class Controller(Website):
 
     @validate_token
     @http.route(['/api/partner/balance'],
-                type='http', auth="user", methods=['GET'])
+                type='http', auth="none", methods=['GET'])
     def get_partner_balance(self):
         user = request.env['res.users'].browse(request.uid)
         partner = user.partner_id
@@ -68,7 +68,7 @@ class Controller(Website):
 
     @validate_token
     @http.route(['/api/partner/sent'],
-                type='http', auth="user", methods=['POST'], csrf=False)
+                type='http', auth="none", methods=['POST'], csrf=False)
     def make_transaction(self, **kw):
         logging.info('make transaction with' + ' %s' % kw)
         user = request.env['res.users'].browse(request.uid)
@@ -117,6 +117,7 @@ class Controller(Website):
 
                 })
             except ValidationError as e:
+                request.env.cr.rollback()
                 logging.error(e)
                 result.update({
                     'success': 0,
@@ -124,6 +125,7 @@ class Controller(Website):
                     'balance': partner.balance
                 })
             except Exception as e:
+                request.env.cr.rollback()
                 logging.error(e)
                 result.update({
                     'success': 0,
