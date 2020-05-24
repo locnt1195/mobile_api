@@ -4,7 +4,7 @@
 
 # Source Code and VCS
 - Source code on github https://github.com/locnt1195/mobile_api
-- VCS: I deploy this application on Digital Ocean. You can access application via 128.199.175.107:8071
+- VCS: I deploy this application on Digital Ocean. You can access application via 128.199.175.107:8071, 
 
 # API Document
 Get Access Token
